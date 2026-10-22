@@ -1,0 +1,114 @@
+
+/* ROTATING ROLE TEXT */
+
+const roles = [
+    "Tech Enthusiast",
+    "Creative Learner",
+    "Future Developer",
+    "Student"
+];
+
+let roleIndex = 0;
+const roleElement = document.getElementById("roleText");
+
+setInterval(() => {
+    roleIndex = (roleIndex + 1) % roles.length;
+    roleElement.textContent = roles[roleIndex];
+    roleElement.style.animation = "none";
+    void roleElement.offsetWidth;
+    roleElement.style.animation = "roleFade .6s ease";
+}, 2200);
+
+/* BUTTERFLY IMAGE CURSOR MOVEMENT */
+
+const butterfly = document.getElementById("butterflyCursor");
+
+document.addEventListener("mousemove", function(event) {
+    butterfly.style.left = event.clientX + "px";
+    butterfly.style.top = event.clientY + "px";
+});
+
+/* OPEN CERTIFICATE OR RESUME */
+
+function viewDocument(filePath, title) {
+    const modal = document.getElementById("documentModal");
+    const frame = document.getElementById("documentFrame");
+
+    document.getElementById("documentTitle").textContent = title;
+    frame.src = filePath;
+
+    modal.classList.add("show");
+    document.body.style.overflow = "hidden";
+}
+
+/* ANIMATE CERTIFICATE HEADINGS */
+
+function animatePlatformHeading(heading) {
+    const label = heading.dataset.animateHeading;
+
+    heading.replaceChildren();
+
+    Array.from(label).forEach((character, index) => {
+        const span = document.createElement("span");
+        span.className = "letter";
+        span.style.setProperty("--letter-index", index);
+        span.textContent = character === " " ? "\u00a0" : character;
+        heading.appendChild(span);
+    });
+
+    heading.classList.remove("animate");
+    void heading.offsetWidth;
+    heading.classList.add("animate");
+}
+
+if ("IntersectionObserver" in window) {
+    const headingObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animatePlatformHeading(entry.target);
+            } else {
+                entry.target.classList.remove("animate");
+            }
+        });
+    }, { threshold: 0.4 });
+
+    document.querySelectorAll("[data-animate-heading]").forEach(heading => {
+        headingObserver.observe(heading);
+    });
+}
+
+/* CLOSE DOCUMENT VIEWER */
+
+function closeDocuments() {
+    document.getElementById("documentModal").classList.remove("show");
+    document.getElementById("documentFrame").src = "";
+    document.body.style.overflow = "";
+}
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+        closeDocuments();
+    }
+});
+
+/* ANIMATED THANK YOU MESSAGES */
+
+const thankYouMessages = [
+    "Thank you for visiting my portfolio! 💜",
+    "I hope you enjoyed exploring my skills and projects.",
+    "Every project is a new opportunity to learn.",
+    "Keep learning, keep creating, and keep growing! ",
+    "Thank you for being part of my journey!"
+];
+
+let thankYouIndex = 0;
+const thankYouElement = document.getElementById("thankYouMessage");
+
+setInterval(() => {
+    thankYouElement.style.animation = "none";
+    void thankYouElement.offsetWidth;
+
+    thankYouIndex = (thankYouIndex + 1) % thankYouMessages.length;
+    thankYouElement.textContent = thankYouMessages[thankYouIndex];
+    thankYouElement.style.animation = "thankYouFade 1s ease";
+}, 3500);
